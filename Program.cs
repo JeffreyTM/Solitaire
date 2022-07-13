@@ -1,28 +1,29 @@
 ﻿// Global variables
-List<string> deck = new List<string>();
+List<string> cards = new List<string>();
 List<bool> inDeck = new List<bool>();
 
 
 // Create, shuffle and display the deck
-ResetDeck();
+ResetCards();
 Shuffle();
 DisplayDeck();
 
 
 void DisplayDeck()
 {
-    foreach (var card in deck)
+    foreach (var card in cards)
     {
-        if (inDeck[deck.IndexOf(card)])
+        if (inDeck[cards.IndexOf(card)] || 1 == 1)
         {
-            Console.WriteLine(ToString(card));
+            Console.WriteLine(ToString(card) + " " + inDeck[cards.IndexOf(card)]);
+
         }
     }
 }
 
-void ResetDeck()
+void ResetCards()
 {
-    deck.Clear();
+    cards.Clear();
     inDeck.Clear();
     // Format (0=C, 1=D, 2=H, 3=S): 013 = King of Clubs; 16 = Six of Diamonds
     for (int i = 0; i < 4; i++)
@@ -30,7 +31,7 @@ void ResetDeck()
         int count = 1;
         while (count <= 13)
         {
-            deck.Add(i + "" + count);
+            cards.Add(i + "" + count);
             inDeck.Add(true);
             count++;
         }
@@ -39,25 +40,31 @@ void ResetDeck()
 
 void Shuffle()
 {
-    List<string> deckCopy = new List<string>();
+    List<string> cardsCopy = new List<string>();
+    List<bool> inDeckCopy = new List<bool>();
     Random random = new Random();
-    foreach (var card in deck)
+
+    for (int i = 0; i < cards.Count; i++)
     {
-        deckCopy.Add(card);
+        cardsCopy.Add(cards[i]);
+        inDeckCopy.Add(inDeck[i]);
     }
     //Randomly swaps a card 10,000 times
     for (int i = 0; i < 10000; i++)
     {
-        deck[random.Next(deck.Count)] = deckCopy[random.Next(deckCopy.Count)];
+        int randomIdx = random.Next(cards.Count);
+        int randomIdxCopy = random.Next(cards.Count);
+        cards[randomIdx] = cardsCopy[randomIdxCopy];
+        inDeck[randomIdx] = inDeckCopy[randomIdxCopy];
     }
     
 }
 
 string ToString(string card)
 {
-    int index = deck.IndexOf(card);
-    int face = int.Parse(deck[index].Substring(0, 1));
-    int value = int.Parse(deck[index].Substring(1));
+    int index = cards.IndexOf(card);
+    int face = int.Parse(cards[index].Substring(0, 1));
+    int value = int.Parse(cards[index].Substring(1));
     
     string cardString = string.Empty;
     switch (value)
